@@ -1,0 +1,10 @@
+abre el libro y retorna el marcador con la pagina actual
+set the name of the catalog to be searched , ornull to search the default catalog
+get the docker rest uri
+gets all codecs which can decode the specified format
+get the specified section
+random node form group
+transforms the input to result by executing a closure
+logs the given exception using the platform 's logging mechanism . the exception is logged as an error with the error code javastatusconstants.internal _ error
+get the value of one of the fields of a datetime . this could be used to get a field using a different chronology . for example : instant dt = new instant ; int gjyear = dt.get chronology.getcoptic . year
+create and cache a new recording debug info structure

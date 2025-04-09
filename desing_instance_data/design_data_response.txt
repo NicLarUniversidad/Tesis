@@ -1,0 +1,10 @@
+int function ( ) { return this . getMarcador ( ) ; }
+void function ( String arg0 ) { this . catalogName = arg0 ; }
+URI function ( ) { return uri ; }
+String [ ] function ( Format arg0 ) { return getCodecClasses ( null , arg0 ) ; }
+Section function ( int arg0 ) { return sections . get ( arg0 ) ; }
+GnpNetLayer function ( String arg0 ) { IPv4NetID loc0 = createNewID ( ) ; return newNetLayer ( loc0 ) ; }
+Object function ( Object arg0 ) { iClosure . execute ( arg0 ) ; return arg0 ; }
+void function ( Throwable arg0 , String arg1 ) { JavaPlugin . log ( new Status ( IStatus . ERROR , JavaPlugin . getPluginId ( ) , IJavaStatusConstants . INTERNAL_ERROR , arg1 , arg0 ) ) ; }
+int function ( DateTimeField arg0 ) { if ( arg0 == null ) { throw new IllegalArgumentException ( "srini_string" ) ; } return arg0 . get ( getMillis ( ) ) ; }
+void function ( ) { mostRecentInfo = new DebugRecordingInfo ( ) ; }
