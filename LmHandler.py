@@ -47,7 +47,8 @@ class LmHandler(object):
             "messages": [
                 {"role": "system", "content": system},
                 {"role": "user", "content": prompt},
-            ]
+            ],
+            "max_tokens": 1000
         }
 
         promptUrl = self.getPromptUrl()

@@ -2,17 +2,20 @@ import json
 from BasicFileReader import BasicFileReader
 from LmHandler import LmHandler
 from MetricsCalculator import MetricsCalculator
+from PromptModifier import PromptModifier
 
 
-class BaselinePromptTester(object):
+class PromptTester(object):
 
-    def __init__(self, model, language, resultFileName, firstPromptId = 0):
+    def __init__(self, model, language, resultFileName, firstPromptId = 0, modifier = "", system = ""):
         self.model = model
         self.language = language
         self.resultFileName = resultFileName
         self.firstPromptId = firstPromptId
         self.lmHandler = LmHandler()
         self.metricsCalculator = MetricsCalculator()
+        self.promptModifier = PromptModifier(modifier)
+        self.system = system
         fileReader = BasicFileReader("desing_instance_data/design_data_response_001.txt")
         self.prompts = fileReader.data
         fileReader = BasicFileReader("desing_instance_data/design_data_prompts_001.txt")
@@ -22,14 +25,12 @@ class BaselinePromptTester(object):
     def run(self):
         f = open(self.resultFileName, "w")
         f.write("Prompt-ID\tPrompt\tBaseline\tResult\tCodeResult\tCodeBleuScore\tBleuScore\tExactMatchScore\n")
-        #f.close()
         for i in range(len(self.prompts)):
-            #if i > 34: # == 25, 34
             prompt = self.prompts[i]
             prompt += f"\n Write a code in {self.language}"
-            #prompt += f"\n Generate just the code, without commentaries and explications"
+            prompt = self.promptModifier.applyChanges(prompt)
             baselineResponse = self.responses[i]
-            response = self.lmHandler.sendPrompt(prompt, self.model).content
+            response = self.lmHandler.sendPrompt(prompt, self.model, self.system).content
             response = json.loads(response)
             response_content = str(response["choices"][0]["message"]["content"])
             try:
@@ -42,10 +43,11 @@ class BaselinePromptTester(object):
             codeBleuScore = self.metricsCalculator.calc_code_bleu(baselineResponse, code, self.language)
             bleuScore = self.metricsCalculator.calc_bleu(baselineResponse, code)
             exactMatchScore = self.metricsCalculator.calc_exact_match(baselineResponse, code)
-            prompt = prompt.replace("\n", "\\n")
-            response_content = response_content.replace("\n", "\\n")
-            baselineResponse = baselineResponse.replace("\n", "\\n")
-            #f = open(self.resultFileName, "a")
+            prompt = prompt.replace("\n", "\\n").replace("\t", "")
+            system = self.system.replace("\n", "\\n").replace("\t", "")
+            prompt += f"| system: |{system}"
+            response_content = response_content.replace("\n", "\\n").replace("\t", "")
+            baselineResponse = baselineResponse.replace("\n", "\\n").replace("\t", "")
             newLine = f"{self.firstPromptId + i}\t{prompt}\t{baselineResponse}\t{response_content}\t{code}\t{codeBleuScore}\t{bleuScore}\t{exactMatchScore}\n"
             try:
                 f.write(newLine)
