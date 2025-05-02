@@ -7,19 +7,21 @@ from PromptModifier import PromptModifier
 
 class PromptTester(object):
 
-    def __init__(self, model, language, resultFileName, firstPromptId = 0, modifier = "", system = ""):
+    def __init__(self, model, language, resultFileName, firstPromptId = 0, modifier = "", system = "", prefix="", append=""):
         self.model = model
         self.language = language
-        self.resultFileName = resultFileName
+        self.resultFileName = f"results/{resultFileName}"
         self.firstPromptId = firstPromptId
         self.lmHandler = LmHandler()
         self.metricsCalculator = MetricsCalculator()
         self.promptModifier = PromptModifier(modifier)
         self.system = system
-        fileReader = BasicFileReader("desing_instance_data/design_data_response_001.txt")
-        self.prompts = fileReader.data
         fileReader = BasicFileReader("desing_instance_data/design_data_prompts_001.txt")
+        self.prompts = fileReader.data
+        fileReader = BasicFileReader("desing_instance_data/design_data_response_001.txt")
         self.responses = fileReader.data
+        self.prefix = prefix
+        self.append = append
 
 
     def run(self):
@@ -29,6 +31,7 @@ class PromptTester(object):
             prompt = self.prompts[i]
             prompt += f"\n Write a code in {self.language}"
             prompt = self.promptModifier.applyChanges(prompt)
+            prompt = f"{self.prefix}\n\n\n{prompt}\n\n\n{self.append}"
             baselineResponse = self.responses[i]
             response = self.lmHandler.sendPrompt(prompt, self.model, self.system).content
             response = json.loads(response)
