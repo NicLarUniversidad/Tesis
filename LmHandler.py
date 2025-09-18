@@ -1,3 +1,4 @@
+import json
 import time
 
 import requests
@@ -5,9 +6,14 @@ import requests
 
 class LmHandler(object):
 
-    def __init__(self, url="localhost", port="1234"):
+    def __init__(self, config, url="localhost", port="1234", active_model = None):
         self.url = url
         self.port = port
+        f = open(config, 'r')
+        content = f.read()
+        f.close()
+        self.config = json.loads(content)
+        self.active_model = active_model
 
     def getBaseUrl(self):
         baseUrl = f"http://{self.url}:{self.port}"
@@ -50,7 +56,14 @@ class LmHandler(object):
             ],
             "max_tokens": 1000
         }
-
+        print(f"Sending prompt {prompt} to {self.getPromptUrl()}")
         promptUrl = self.getPromptUrl()
         response = requests.post(promptUrl, json=data)
         return response
+
+    def sendPromptToAllModels(self, prompt, system=""):
+        responses = dict()
+
+        for model in self.config["models"]:
+            response = self.sendPrompt(prompt, model, system=system)
+            responses[model] = response.json()

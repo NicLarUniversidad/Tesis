@@ -1,0 +1,10 @@
+{
+  "models" : [
+    "phi-3.1-mini-128k-instruct",
+    "deepseek-coder-6.7b-kexer",
+    "deepseek-r1-distill-qwen-7b"
+  ],
+  "lmm-params" : {
+
+  }
+}
