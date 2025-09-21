@@ -17,7 +17,7 @@ class ResultsMerger:
         header = "ID\tnl\tcode_original\t"
         #for model in models:
         #    header += f"{model}_response\t{model}_code\t{model}_BLEU\t{model}_CODE_BLEU\t{model}_EM\tparse_success\n"
-        header += f"response\tcode\tBLEU\tCODE_BLEU\tEM\tparse_success\tprocessed\tmodel_id\n"
+        header += f"response\tcode\tBLEU\tCODE_BLEU\tEM\tparse_success\tprocessed\tmodel_id\ttechnique\n"
         f.write(header)
         f.close()
         for model in models:
@@ -41,6 +41,7 @@ class ResultsMerger:
                     prompt_result[f"parse_success"] = success
                     prompt_result[f"processed"] = "True"
                     prompt_result[f"model_id"] = model
+                    prompt_result[f"technique"] = "baseline"
                 else:
                     prompt_result[f"response"] = ""
                     prompt_result[f"code"] = ""
@@ -50,6 +51,7 @@ class ResultsMerger:
                     prompt_result[f"parse_success"] = ""
                     prompt_result[f"processed"] = "False"
                     prompt_result[f"model_id"] = model
+                    prompt_result[f"technique"] = "baseline"
                 values = [str(v) for v in prompt_result.values()]
                 new_line = "\t".join(values)
                 new_line = new_line.encode("cp1252", errors="replace").decode("cp1252")
