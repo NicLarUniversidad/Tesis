@@ -2,7 +2,9 @@
   "models" : [
     "phi-3.1-mini-128k-instruct",
     "deepseek-coder-6.7b-kexer",
-    "deepseek-r1-distill-qwen-7b"
+    "deepseek-r1-distill-qwen-7b",
+    "starcoder2-7b-ls-GGUF/starcoder2-7b-ls.Q4_K_S.gguf",
+    "starcoder-Q4_K_M-GGUF/starcoder-q4_k_m.gguf"
   ],
   "lmm-params" : {
 
